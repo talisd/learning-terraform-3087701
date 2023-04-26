@@ -32,7 +32,7 @@ resource "aws_security_group" "blob" {
   name = "blob"
   description = "Allow http in. Allow everything out"
 
-  vpc_id = data.aws_vpc.id
+  vpc_id = data.aws_vpc.default.id
 }
 
 resource "aws_security_rule" "blog_http_in" {
