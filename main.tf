@@ -28,7 +28,7 @@ resource "aws_instance" "blog" {
   }
 }
 
-resource "aws_security_group "blob" {
+resource "aws_security_group" "blob" {
   name = "blob"
   description = "Allow http in. Allow everything out"
 
