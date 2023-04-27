@@ -25,8 +25,22 @@ module "blog_vpc" {
 
   tags = {
     Terraform = "true"
-    Environment = "dev"
+    Environment = "DEV"
   }
+}
+
+module "blog_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "4.17.2"
+  name = "blog_new"
+
+  vpc_id = module.blog_vpc.public_subnets[0].id
+
+  ingress_rules       = ["http-80-tcp", "https-443-tcp"]
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+
+  egress_rules        = ["http-80-tcp", "https-443-tcp"]
+  egress_cidr_blocks  = ["0.0.0.0/0"]
 }
 
 resource "aws_instance" "blog" {
@@ -51,7 +65,7 @@ module "alb" {
 
   vpc_id             = module.blog_vpc.vpc_id
   subnets            = module.blog_vpc.public_subnets
-  security_groups    = module.blog_sg.security_group_id
+  security_groups    = [module.blog_sg.security_group_id]
 
   access_logs = {
     bucket = "my-alb-logs"
@@ -86,16 +100,3 @@ module "alb" {
 }
 
 
-module "blog_sg" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "4.17.2"
-  name = "blog_new"
-
-  vpc_id = module.blog_vpc.public_subnets[0]
-
-  ingress_rules       = ["http-80-tcp", "https-443-tcp"]
-  ingress_cidr_blocks = ["0.0.0.0/0"]
-
-  egress_rules        = ["http-80-tcp", "https-443-tcp"]
-  egress_cidr_blocks  = ["0.0.0.0/0"]
-}
