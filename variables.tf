@@ -35,12 +35,12 @@ variable "environment" {
 }
 
 variable "asg_min_size" {
-  default = "min # instance in ASG" 
+  description = "min # instance in ASG" 
   default  = 1
 }
 
 
 variable "asg_max_size" {
-  default = "max # instance in ASG" 
+  description = "max # instance in ASG" 
   default  = 2
 }
